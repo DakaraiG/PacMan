@@ -103,3 +103,17 @@ setInterval(function() {
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
+
+const START = document.querySelector("#startBtn");
+
+function startGame() {
+
+    START.style.display = "none";
+
+    document.addEventListener("keydown", keyDown);
+    document.addEventListener("keyup", "keyUp");
+
+
+}
+
+START.addEventListener("click", startGame);
