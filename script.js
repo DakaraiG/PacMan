@@ -83,21 +83,26 @@ setInterval(function() {
         playerTop++;
         player.style.top = playerTop + 'px';
         playerMouth.classList = 'down';
+        
+        pointCheck();
     }
     else if(upPressed) {
         playerTop--;
         player.style.top = playerTop + 'px';
         playerMouth.classList = 'up';
+        pointCheck();
     }
     else if(leftPressed) {
         playerLeft--;
         player.style.left = playerLeft + 'px';
         playerMouth.classList = 'left';
+        pointCheck();
     }
     else if(rightPressed) {
         playerLeft++;
         player.style.left = playerLeft + 'px';
         playerMouth.classList = 'right';
+        pointCheck();
     }
 }, 10);
 
@@ -108,7 +113,7 @@ const START = document.querySelector("#startBtn");
 
 function startGame() {
 
-    pointCheck();
+    
 
     START.style.display = "none";
 
