@@ -108,12 +108,33 @@ const START = document.querySelector("#startBtn");
 
 function startGame() {
 
+    pointCheck();
+
     START.style.display = "none";
 
     document.addEventListener("keydown", keyDown);
-    document.addEventListener("keyup", "keyUp");
+    document.addEventListener("keyup", keyUp);
 
 
 }
 
 START.addEventListener("click", startGame);
+
+
+
+
+function pointCheck() {
+    const position = player.getBoundingClientRect();
+    const points = document.querySelectorAll('.point');
+    for (let i = 0; i < points.length; i++) {
+        let pos = points[i].getBoundingClientRect();
+        if (
+            position.right > pos.left &&
+            position.left < pos.right &&
+            position.bottom > pos.top &&
+            position.top < pos.bottom
+        ) {
+            points[i].classList.remove('point');
+        }
+    }
+}
