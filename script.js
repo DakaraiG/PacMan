@@ -13,11 +13,29 @@ let maze = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 0, 0, 1, 0, 3, 0, 0, 0, 1],
+    [1, 0, 0, 1, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 3, 1, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
+
+function generateEnemy() {
+    let row = Math.floor(Math.random() * maze.length);
+    let column = Math.floor(Math.random() * maze[row].length);
+
+    if (maze[row][column] == 0) {
+        maze[row][column] = 3;
+    }
+    else {
+        generateEnemy();
+    }
+}
+
+generateEnemy();
+generateEnemy();
+generateEnemy();
+generateEnemy();
+
 
 //Populates the maze in the HTML
 for (let y of maze) {
@@ -45,6 +63,41 @@ for (let y of maze) {
         }
 
         main.appendChild(block);
+
+        let row = Math.floor(Math.random() * maze.length);
+        let column = Math.floor(Math.random() * maze[row].length);
+
+        for (let row of maze) {
+            for (let column of maze) {
+                let random = Math.floor(Math.random() * 2);
+                let randomM = Math.floor(Math.random() * 10);
+                maze[row[x]][column[x]] = random;
+                maze[1][1] = 2
+             }
+         }
+
+        //  for (let i = 0; i < 5; i++) {
+        //     console.log(i)
+        //   }
+          
+
+       
+        // for (let value of maze) {
+        //     let rowW = Math.floor(Math.random() * maze.length);
+        //     let columnW = Math.floor(Math.random() * maze[rowW].length);
+            
+        // if (maze[rowW][columnW] == 0) {
+        //     maze[rowW][columnW] = 1;
+        // }
+        // else {
+        //     continue;
+        // }
+        
+
+        //     maze[1][1] = 2
+        // }
+        
+        
     }
 }
 
@@ -180,3 +233,24 @@ function pointCheck() {
         }
     }
 }
+
+
+function createLives() {
+    const li = document.createElement("li");
+    const ul = document.querySelector(".lives ul");
+    ul.appendChild(li);
+}
+createLives();
+createLives();
+createLives();
+
+function removeLives() {
+    const li = document.querySelector(".lives ul li");
+    li.parentNode.removeChild(li);
+}
+
+//removeLives();
+
+
+
+
