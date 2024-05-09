@@ -64,17 +64,19 @@ for (let y of maze) {
 
         main.appendChild(block);
 
-        let row = Math.floor(Math.random() * maze.length);
-        let column = Math.floor(Math.random() * maze[row].length);
+        // let row = Math.floor(Math.random() * maze.length);
+        // let column = Math.floor(Math.random() * maze[row].length);
 
-        for (let row of maze) {
-            for (let column of maze) {
-                let random = Math.floor(Math.random() * 2);
-                let randomM = Math.floor(Math.random() * 10);
-                maze[row[x]][column[x]] = random;
-                maze[1][1] = 2
-             }
-         }
+        // for (let row of maze) {
+        //     for (let column of maze) {
+        //         let random = Math.floor(Math.random() * 2);
+        //         let randomM = Math.floor(Math.random() * 10);
+        //         maze[row[x]][column[x]] = random;
+        //         maze[1][1] = 2
+        //      }
+        //  }
+
+        ///////
 
         //  for (let i = 0; i < 5; i++) {
         //     console.log(i)
@@ -132,69 +134,55 @@ let playerTop = 0;
 let playerLeft = 0;
 
 
-setInterval(function () {
-    const position = player.getBoundingClientRect();
+let timer = setInterval(function () {
+
+    pointCheck();
+    //enemyCheck();
+    console.log(enemyCheck());
+    const playerPosition = player.getBoundingClientRect();
+    let position = {
+        left: playerPosition.left,
+        right: playerPosition.right,
+        top: playerPosition.top,
+        bottom: playerPosition.bottom
+    }
+
     if (downPressed) {
-        const position = player.getBoundingClientRect();
-        //playerTop++;
-        let newBottom = position.bottom + 1;
-
-        let btmL = document.elementFromPoint(position.left, newBottom);
-        let btmR = document.elementFromPoint(position.right, newBottom);
-
-        if (btmL.classList.contains('wall') == false && btmR.classList.contains('wall') == false) {
+        position.bottom++;
+        if(!collision(position,"wall")){
             playerTop++;
-            player.style.top = playerTop + 'px';
-
+            player.style.top = playerTop + "px";
         }
-        playerMouth.classList = 'down';
-
-        pointCheck();
+        playerMouth.classList = "down";
     }
-    else if (upPressed) {
-        const position = player.getBoundingClientRect();
-        //playerTop--;
-        let newTop = position.top - 1;
-        let topL = document.elementFromPoint(position.left, newTop);
-        let topR = document.elementFromPoint(position.right, newTop);
 
-        if (topL.classList.contains('wall') == false && topR.classList.contains('wall') == false) {
+    if (upPressed) {
+        position.top--;
+        if(!collision(position,"wall")){
             playerTop--;
-            player.style.top = playerTop + 'px';
+            player.style.top = playerTop + "px";
         }
-        playerMouth.classList = 'up';
-        pointCheck();
+        playerMouth.classList = "up";
     }
-    else if (leftPressed) {
-        const position = player.getBoundingClientRect();
-        //playerLeft--;
-        let newLeft = position.left - 1;
-        let topL = document.elementFromPoint(newLeft, position.top);
-        let btmR = document.elementFromPoint(newLeft, position.bottom);
-
-        if (topL.classList.contains('wall') == false && btmR.classList.contains('wall') == false) {
+    if (leftPressed) {
+        position.left--;
+        if(!collision(position,"wall")){
             playerLeft--;
-            player.style.left = playerLeft + 'px'
-
+            player.style.left = playerLeft + "px";
         }
-        playerMouth.classList = 'left';
-        pointCheck();
+        playerMouth.classList = "left";
     }
-    else if (rightPressed) {
-        const position = player.getBoundingClientRect();
-        //playerLeft++;
-        let newRight = position.right + 1;
-        let topR = document.elementFromPoint(newRight, position.top);
-        let btmR = document.elementFromPoint(newRight, position.bottom);
-
-        if (topR.classList.contains('wall') == false && btmR.classList.contains('wall') == false) {
+    if (rightPressed) {
+        position.right++;
+        if(!collision(position,"wall")){
             playerLeft++;
-            player.style.left = playerLeft + 'px';
+            player.style.left = playerLeft + "px";
         }
-        playerMouth.classList = 'right';
-        pointCheck();
+        playerMouth.classList = "right";
     }
-}, 10);
+
+    
+}, 1);
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
@@ -216,22 +204,72 @@ function startGame() {
 START.addEventListener("click", startGame);
 
 
-
+let score = 0;
 
 function pointCheck() {
     const position = player.getBoundingClientRect();
+
+    const check = collision(position,'point');
+
+    if (check != false){
+        check.classList.remove('point');
+        score++;
+        //check this line 
+        const scoreP = document.querySelector('.score p')
+        scoreP.firstChild.nodeValue = score;
+    }
+
     const points = document.querySelectorAll('.point');
-    for (let i = 0; i < points.length; i++) {
-        let pos = points[i].getBoundingClientRect();
-        if (
+    if(points.length <= 0){
+        clearInterval(timer);
+        gameOver();
+    }
+}
+
+function collision(position,clss) {
+    const elements = document.querySelectorAll(`.${clss}`)
+    for(let i = 0; i < elements.length; i++){
+        let pos = elements[i].getBoundingClientRect();
+        if(
             position.right > pos.left &&
             position.left < pos.right &&
             position.bottom > pos.top &&
             position.top < pos.bottom
-        ) {
-            points[i].classList.remove('point');
+        ){
+            return elements[i];
         }
     }
+    return false;
+}
+
+function enemyCheck() {
+    const position = player.getBoundingClientRect();
+    const check = collision(position,"enemy");
+    let counter = 0
+    if(check != false){
+        return true;
+    }
+    else{
+        return false;
+    }
+
+    // if(check !=false){
+    //     while (check == true){
+    //         console.log("in contact")
+    //     }
+    //     counter++;
+    //     if(counter == 3){
+    //         gameOver();
+    //     }
+    //     else{
+    //         //removeLives();
+    //     }
+    // }
+}
+
+function gameOver() {
+    console.log("game over")
+    clearInterval(timer);
 }
 
 
@@ -244,10 +282,11 @@ createLives();
 createLives();
 createLives();
 
-function removeLives() {
-    const li = document.querySelector(".lives ul li");
-    li.parentNode.removeChild(li);
-}
+// function removeLives() {
+//     const li = document.getElementById('livesC')
+//     li.parentNode.removeChild(li);
+   
+// }
 
 //removeLives();
 
