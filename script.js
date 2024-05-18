@@ -133,12 +133,20 @@ const playerMouth = player.querySelector('.mouth');
 let playerTop = 0;
 let playerLeft = 0;
 
+let detect = setInterval(function(){
+    console.log(enemyCheck());
+    if(enemyCheck() == true){
+        removeLives();
+    }
+
+},750);
+
 
 let timer = setInterval(function () {
 
     pointCheck();
     //enemyCheck();
-    console.log(enemyCheck());
+
     const playerPosition = player.getBoundingClientRect();
     let position = {
         left: playerPosition.left,
@@ -188,9 +196,10 @@ document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
 
 const START = document.querySelector("#startBtn");
+const END = document.querySelector("#endBtn")
+END.style.display = "none";
 
 function startGame() {
-
 
 
     START.style.display = "none";
@@ -269,6 +278,7 @@ function enemyCheck() {
 
 function gameOver() {
     console.log("game over")
+    END.style.display = "flex";
     clearInterval(timer);
 }
 
@@ -282,13 +292,22 @@ createLives();
 createLives();
 createLives();
 
-// function removeLives() {
-//     const li = document.getElementById('livesC')
-//     li.parentNode.removeChild(li);
+let x = 0;
+function removeLives() {
+     //const li = document.getElementById('livesC')
+     const ul = document.querySelector(".lives ul");
+     const li = document.querySelectorAll('.lives ul li');
+     if(x > 3){
+        gameOver();
+     }
+     else{
+        x++;
+        ul.parent.removeChild(li);
+     }
    
-// }
+}
 
-//removeLives();
+
 
 
 
